@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: ai_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 
+      MYSQL_DATABASE: image_analysis
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ai_backend
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn ai_image_analysis.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+      - media_data:/app/media
+    ports:
+      - "8000:8000"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=image_analysis
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+      - GEMINI_API_KEY=AIzaSyA754CAkze6BO_FOrt9vozASz2kLFPkZ3Y
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ai_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    stdin_open: true
+    tty: true
+
+volumes:
+  db_data:
+  media_data:

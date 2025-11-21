@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Vision Platform - Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+<div class="container">
+    <div class="left-panel">
+        <div class="brand">
+            <h1>AI Vision Platform</h1>
+            <p>Advanced object detection and intelligent analysis powered by state-of-the-art machine learning models</p>
+        </div>
+        <div class="features">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>
+                </div>
+                <div class="feature-content">
+                    <h3>YOLO Object Detection</h3>
+                    <p>Real-time object detection with industry-leading accuracy and performance metrics</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+                </div>
+                <div class="feature-content">
+                    <h3>AI-Powered Q&A</h3>
+                    <p>Ask questions about detected objects using Gemini's advanced natural language understanding</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </div>
+                <div class="feature-content">
+                    <h3>Interactive Analysis</h3>
+                    <p>Sortable results with detailed confidence scores and bounding box coordinates</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="auth-header">
+            <h2 id="auth-title">Welcome Back</h2>
+            <p id="auth-subtext">Enter your credentials to access your account</p>
+        </div>
+
+        <div class="tab-container">
+            <button class="tab active" onclick="switchTab('login')">Sign In</button>
+            <button class="tab" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="active">
+            <div class="form-group">
+                <label for="login-email">Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" id="login-email" placeholder="you@example.com" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="signup-name">Full Name</label>
+                <div class="input-wrapper">
+                    <input type="text" id="signup-name" placeholder="John Doe" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="signup-email">Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" id="signup-email" placeholder="you@example.com" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="signup-password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="signup-password" placeholder="Create a password" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="signup-confirm">Confirm Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="signup-confirm" placeholder="Confirm your password" required>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+const loginForm = document.getElementById('login-form');
+const signupForm = document.getElementById('signup-form');
+const authTitle = document.getElementById('auth-title');
+const authSubtext = document.getElementById('auth-subtext');
+
+// Switch tabs
+function switchTab(tab) {
+    if (tab === 'login') {
+        loginForm.classList.add('active');
+        signupForm.classList.remove('active');
+        authTitle.textContent = 'Welcome Back';
+        authSubtext.textContent = 'Enter your credentials to access your account';
+    } else {
+        signupForm.classList.add('active');
+        loginForm.classList.remove('active');
+        authTitle.textContent = 'Create Account';
+        authSubtext.textContent = 'Start analyzing images with AI';
+    }
+}
+
+// SIGNUP
+
+signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const full_name = document.getElementById("signup-name").value;
+    const email = document.getElementById("signup-email").value;
+    const password = document.getElementById("signup-password").value;
+    const password2 = document.getElementById("signup-confirm").value;
+
+    if (password !== password2) return;
+
+    const response = await fetch("/api/accounts/signup/", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ full_name, email, password, password2 })
+    });
+
+    if (response.status === 201) {
+        signupForm.reset();
+        switchTab("login");  // Direct switch, no alert
+    }
+});
+
+// LOGIN
+
+loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+
+    const response = await fetch("/api/accounts/login/", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    });
+
+    if (response.status === 200) {
+        window.location.href = "/home/"; // Direct redirect, no alert
+    }
+});
+</script>
+
+
+
+<style>
+#login-form, #signup-form { display: none; }
+#login-form.active, #signup-form.active { display: block; }
+</style>
+</body>
+</html>

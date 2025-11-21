@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vision Platform - Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+<header class="header">
+    <div class="header-content">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+            </div>
+            <h1>AI Vision Platform</h1>
+        </div>
+        <div class="user-menu">
+            <div class="user-info">
+                <div class="avatar"></div>
+                <div class="user-details">
+                    <div class="user-name"></div>
+                    <div class="user-email"></div>
+                </div>
+            </div>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </div>
+    <script src="/static/js/header.js"></script>
+</header>
+
+<main class="main-content">
+    <section class="upload-section">
+        <h2 class="section-title">Upload Image for Detection</h2>
+        <p class="section-subtitle">Upload an image to detect objects using our advanced YOLOv8 model</p>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+            </div>
+            <div class="upload-text">Drop your image here</div>
+            <div class="upload-subtext">or click to browse (PNG, JPG, JPEG up to 10MB)</div>
+            <button class="upload-btn" id="selectBtn">Select Image</button>
+            <input type="file" id="fileInput" class="file-input" accept="image/*">
+        </div>
+
+        <div class="image-preview" id="imagePreview">
+            <div class="preview-container">
+                <div class="preview-image-wrapper">
+                    <img src="" alt="Preview" class="preview-image" id="previewImg">
+                </div>
+                <div class="preview-actions">
+                    <button class="action-btn detect-btn" id="detectBtn">Detect Objects</button>
+                    <button class="action-btn remove-btn" onclick="removeImage()">Remove Image</button>
+                </div>
+            </div>
+            <div class="upload-progress" id="uploadProgress" style="display:none;">
+                <div class="progress-bar" id="progressBar"></div>
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="results-section" id="resultsSection" style="display:none;">
+        <div class="results-grid">
+            <div class="result-card">
+                <div class="card-header">
+                    <h3 class="card-title">Annotated Image</h3>
+                    <span class="card-badge" id="objectCount">0 Objects</span>
+                </div>
+                <div class="annotated-image-wrapper">
+                    <img src="" alt="Annotated" class="annotated-image" id="annotatedImage">
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="card-header">
+                    <h3 class="card-title">Detection Results</h3>
+                    <span class="card-badge">Sortable</span>
+                </div>
+                <div class="table-wrapper">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Object<span class="sort-icon">▼</span></th>
+                                <th onclick="sortTable(1)">Confidence<span class="sort-icon">▼</span></th>
+                                <th onclick="sortTable(2)">Bounding Box<span class="sort-icon">▼</span></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="qa-section">
+            <div class="qa-header">
+                <div class="qa-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="card-title">Ask Questions About Results</h3>
+                    <p class="section-subtitle" style="margin: 0;">Powered by Gemini 2.5 Flash</p>
+                </div>
+            </div>
+
+            <div class="chat-container" id="chatContainer"></div>
+            <div class="qa-input-wrapper">
+                <input type="text" class="qa-input" placeholder="Ask a question about the detected objects...">
+                <button class="qa-submit">Send</button>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="/static/js/home.js"></script>
+</body>
+</html>
