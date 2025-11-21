@@ -49,7 +49,67 @@ A full-stack AI web application for real-time object detection and intelligent a
 
 ## Getting Started
 
-### 1. Clone Repository
+### Clone Repository
 ```bash
-git clone https://github.com/mdtawhidmostafa/AI_Image_Analysis.git
+git clone https://github.com/mdtawhidmostafa/AI_Vision_Image_Analysis_Platform.git
 cd AI_Image_Analysis
+```
+### Access the Application
+
+- Sign up and log in  
+- Upload images 
+- Perform YOLO object detection 
+- View the annotated detection results 
+- Ask questions using the Gemini assistant
+
+### YOLO Model
+
+- **Supported model example:** yolov8n.pt
+
+
+### Security
+
+- JWT tokens are stored securely in HTTP-only cookies.
+
+### Storage
+
+- Uploaded and annotated images are saved in:
+
+  - backend/media/
+
+### Frontend Communication
+
+- Frontend calls backend APIs using credentials: include for cookie-based authentication.
+
+### Table Features
+
+- Detection table columns are fully sortable.
+
+### Docker Notes
+
+- The backend depends on MySQL, handled through depends_on in docker-compose.yml.
+
+- Persistent storage:
+
+  - db_data → MySQL data
+
+  - media_data → Uploaded & annotated images
+
+- To clean everything:
+```bash
+  docker compose down -v
+```
+
+### Author
+
+-  Md. Tawhid Mostafa
+
+
+
+
+
+
+
+
+
+
